@@ -1,0 +1,60 @@
+<h1>Calculator</h1>
+
+<p *ngIf="!forecasts"><em>Loading...</em></p>
+
+<!-- CSS GRID -->
+
+<!-- Result -->
+<!-- 
+ |     RESULT    | 1
+ | 7 | 8 | 9 | C | 4
+ | 4 | 5 | 6 | / | 4
+ | 1 | 2 | 3 | * | 4
+ |     |     | - | 3
+ |     =     | + | 2
+-->
+
+<div class="calculator">
+  <div class="calculator__grid">
+    <div class="calculator__grid-full">
+      <div class="calculator__current-result">
+        1542
+      </div>
+      <div class="calculator__calculated-result">
+        -245
+      </div>
+    </div>
+    <div class="calculator__grid-five">
+      <button class="calculator__button calculator__button--orange calculator__button--round">7</button>
+      <button class="calculator__button calculator__button--orange calculator__button--round">8</button>
+      <button class="calculator__button calculator__button--orange calculator__button--round">9</button>
+      <div></div>
+      <button class="calculator__button calculator__button--grey calculator__button--soft-corner">C</button>
+    </div>
+    <div class="calculator__grid-five">
+      <button class="calculator__button calculator__button--orange calculator__button--round">4</button>
+      <button class="calculator__button calculator__button--orange calculator__button--round">5</button>
+      <button class="calculator__button calculator__button--orange calculator__button--round">6</button>
+      <div></div>
+      <button class="calculator__button calculator__button--grey calculator__button--soft-corner">/</button>
+    </div>
+    <div class="calculator__grid-five">
+      <button class="calculator__button calculator__button--orange calculator__button--round">1</button>
+      <button class="calculator__button calculator__button--orange calculator__button--round">2</button>
+      <button class="calculator__button calculator__button--orange calculator__button--round">3</button>
+      <div></div>
+      <button class="calculator__button calculator__button--grey calculator__button--soft-corner">*</button>
+    </div>
+    <div class="calculator__grid-three">
+      <button class="calculator__button calculator__button--orange calculator__button--soft-corner">0</button>
+      <button class="calculator__button calculator__button--orange calculator__button--soft-corner">,</button>
+      <div></div>
+      <button class="calculator__button calculator__button--grey calculator__button--soft-corner">-</button>
+    </div>
+    <div class="calculator__grid-two">
+      <button class="calculator__button calculator__button--grey calculator__button--soft-corner">=</button>
+      <div></div>
+      <button class="calculator__button calculator__button--grey calculator__button--soft-corner">+</button>
+    </div>
+  </div>
+</div>
