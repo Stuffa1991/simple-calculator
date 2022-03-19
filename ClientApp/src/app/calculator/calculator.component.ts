@@ -1,7 +1,8 @@
 import { Component, Inject } from '@angular/core';
 
 type operand = "/" | "*" | "*" | "-" | "+" | null
-type allowedNumbers = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+const allowedNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+type allowedNumbers = typeof allowedNumbers[number];
 
 @Component({
   selector: 'app-calculator',
@@ -10,10 +11,10 @@ type allowedNumbers = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 })
 export class CalculatorComponent {
   calculatedOperand: operand = null;
+  calculatedResult: number | undefined = undefined;
   hasPressedOperand = false;
   hasCalculated = false;
-  calculatedResult: number | undefined = undefined;
-  currentResult: number = 0;
+  currentResult = 0;
 
   async setOperand(operand: operand) {
     this.hasPressedOperand = true;
@@ -27,17 +28,18 @@ export class CalculatorComponent {
   }
 
   async clear() {
-    this.calculatedResult = undefined;
-    this.currentResult = 0;
     this.calculatedOperand = null;
+    this.calculatedResult = undefined;
+    this.hasPressedOperand = false;
+    this.hasCalculated = false;
+    this.currentResult = 0;
   }
 
   async appendComma() {
     if (this.currentResult.toString().indexOf(',') !== -1) {
       return;
     }
-    const concat = `${this.currentResult},`;
-    this.currentResult = concat as unknown as number;
+    this.currentResult = await this.concat(this.currentResult, ",");
   }
 
   async appendNumber(number: allowedNumbers) {
@@ -46,9 +48,12 @@ export class CalculatorComponent {
       this.hasCalculated = false;
       this.hasPressedOperand = false;
     } else {
-      const concat = `${this.currentResult}${number}`;
-      this.currentResult = concat as unknown as number;
+      this.currentResult = await this.concat(this.currentResult, number);
     }
+  }
+
+  async concat(concatOne: number | string, concatTwo: number | string): Promise<number> {
+    return `${concatOne}${concatTwo}` as unknown as number;
   }
 
   async calculate(operand?: operand) {
@@ -75,5 +80,13 @@ export class CalculatorComponent {
     }
 
     this.hasCalculated = true;
+  }
+
+  getArrayOfAllowedNumbers(numbers: number[]): allowedNumbers[] {
+    return numbers.filter(this.isAllowedNumber);
+  }
+
+  isAllowedNumber(number: number): number is allowedNumbers {
+    return number in allowedNumbers;
   }
 }

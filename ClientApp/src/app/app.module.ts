@@ -14,6 +14,7 @@ import { CalculatorComponent } from './calculator/calculator.component';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
+    CalculatorComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
