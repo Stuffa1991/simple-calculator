@@ -30,7 +30,7 @@ export class CalculatorComponent {
   }
 
   async appendComma() {
-    if (this.currentResult.toString().indexOf(',') !== -1) {
+    if (this.currentResult.toString().indexOf('.') !== -1) {
       return;
     }
     this.currentResult = await this.concat(this.currentResult, ".");
