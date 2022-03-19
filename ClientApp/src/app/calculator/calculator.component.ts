@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 
-type operand = "/" | "*" | "*" | "-" | "+" | null
+type operand = "/" | "*" | "*" | "-" | "+";
 const allowedNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 type allowedNumbers = typeof allowedNumbers[number];
 
@@ -10,27 +10,21 @@ type allowedNumbers = typeof allowedNumbers[number];
   styleUrls: ['./calculator.component.scss']
 })
 export class CalculatorComponent {
-  calculatedOperand: operand = null;
+  calculatedOperand: operand | null = null;
   calculatedResult: number | undefined = undefined;
-  hasPressedOperand = false;
   hasCalculated = false;
   currentResult = 0;
 
   async setOperand(operand: operand) {
-    this.hasPressedOperand = true;
-    if (this.calculatedResult) {
-      this.calculate(operand);
-    } else {
-      this.calculatedResult = this.currentResult;
-    }
-
+    // This has to happen first, we need to calculate with the last set
+    this.calculate(this.calculatedOperand ?? operand);
+    // This has to happen second
     this.calculatedOperand = operand;
   }
 
   async clear() {
     this.calculatedOperand = null;
     this.calculatedResult = undefined;
-    this.hasPressedOperand = false;
     this.hasCalculated = false;
     this.currentResult = 0;
   }
@@ -39,14 +33,13 @@ export class CalculatorComponent {
     if (this.currentResult.toString().indexOf(',') !== -1) {
       return;
     }
-    this.currentResult = await this.concat(this.currentResult, ",");
+    this.currentResult = await this.concat(this.currentResult, ".");
   }
 
   async appendNumber(number: allowedNumbers) {
-    if (this.hasCalculated || this.hasPressedOperand || this.currentResult === 0 || (number === 0 && this.currentResult === 0)) {
+    if (this.hasCalculated || this.currentResult === 0 || (number === 0 && this.currentResult === 0)) {
       this.currentResult = number
       this.hasCalculated = false;
-      this.hasPressedOperand = false;
     } else {
       this.currentResult = await this.concat(this.currentResult, number);
     }
@@ -57,29 +50,35 @@ export class CalculatorComponent {
   }
 
   async calculate(operand?: operand) {
-    const mock = true;
-    const actualOperand = operand ?? this.calculatedOperand;
-
-    if (mock) {
-      switch (actualOperand) {
-        case "*":
-          this.calculatedResult = Number((this.calculatedResult ?? 1)) * Number(this.currentResult);
-          break;
-        case "/":
-          this.calculatedResult = Number((this.calculatedResult ?? 1)) / Number(this.currentResult);
-          break;
-        case "+":
-          this.calculatedResult = Number((this.calculatedResult ?? 0)) + Number(this.currentResult);
-          break;
-        case "-":
-          this.calculatedResult = Number((this.calculatedResult ?? 0)) - Number(this.currentResult);
-          break;
-      }
+    // No need to do any calculations if no previous result
+    if (!this.calculatedResult) {
+      this.calculatedResult = this.currentResult;
     } else {
-      // TODO: Call service
+      const mock = true;
+      const actualOperand = operand ?? this.calculatedOperand;
+      if (mock) {
+      
+        switch (actualOperand) {
+          case "*":
+            this.calculatedResult = Number((this.calculatedResult ?? 1)) * Number(this.currentResult);
+            break;
+          case "/":
+            this.calculatedResult = Number((this.calculatedResult ?? 1)) / Number(this.currentResult);
+            break;
+          case "+":
+            this.calculatedResult = Number((this.calculatedResult ?? 0)) + Number(this.currentResult);
+            break;
+          case "-":
+            this.calculatedResult = Number((this.calculatedResult ?? 0)) - Number(this.currentResult);
+            break;
+        }
+      } else {
+        // TODO: Call service
+      }
     }
 
     this.hasCalculated = true;
+    this.currentResult = 0;
   }
 
   getArrayOfAllowedNumbers(numbers: number[]): allowedNumbers[] {
