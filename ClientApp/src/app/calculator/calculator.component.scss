@@ -1,8 +1,17 @@
 .calculator {
+  &__current {
+    display: flex;
+    justify-content: center;
+
+    &-result {
+      margin-right: 5px;
+    }
+  }
+
   &__grid {
     display: grid;
     height: 500px;
-    width: 500px;
+    max-width: 500px;
     border: 1px solid;
     padding: 5px;
 
@@ -11,14 +20,17 @@
       margin-bottom: 20px;
       padding: 5px;
       display: flex;
-      align-items: flex-end;
       flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
     }
+
+    $divider: 0px;
 
     &-five {
       margin-bottom: 20px;
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 15px 1fr;
+      grid-template-columns: 1fr 1fr 1fr $divider 1fr;
       grid-column-gap: 10px;
       grid-auto-flow: row;
     }
@@ -26,7 +38,7 @@
     &-three {
       margin-bottom: 20px;
       display: grid;
-      grid-template-columns: 1.5fr 1.5fr 15px 1fr;
+      grid-template-columns: 1.5fr 1.5fr $divider 1fr;
       grid-column-gap: 10px;
       grid-auto-flow: row;
     }
@@ -34,7 +46,7 @@
     &-two {
       margin-bottom: 20px;
       display: grid;
-      grid-template-columns: 3fr 15px 1fr;
+      grid-template-columns: 3fr $divider 1fr;
       grid-column-gap: 10px;
       grid-auto-flow: row;
     }
@@ -42,8 +54,9 @@
 
   &__button {
     border: 0;
+
     &--round {
-      border-radius: 10px;
+      border-radius: 40px;
     }
 
     &--soft-corner {
