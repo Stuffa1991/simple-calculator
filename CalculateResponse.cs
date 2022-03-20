@@ -2,5 +2,5 @@ namespace spectra_systems;
 
 public class CalculateResponse
 {
-    public int result { get; set; }
+    public double result { get; set; }
 }

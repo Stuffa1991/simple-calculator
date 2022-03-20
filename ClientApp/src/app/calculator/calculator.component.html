@@ -20,7 +20,7 @@
           </div>
           <div class="calculator__grid-five">
             <button 
-              *ngFor="let number of getArrayOfAllowedNumbers([7, 8, 9])" 
+              *ngFor="let number of getArrayOfAllowedNumbers(['7', '8', '9'])" 
               (click)="appendNumber(number)" 
               class="calculator__button calculator__button--orange calculator__button--round">
               {{ number }}
@@ -34,7 +34,7 @@
           </div>
           <div class="calculator__grid-five">
             <button 
-              *ngFor="let number of getArrayOfAllowedNumbers([4, 5, 6])" 
+              *ngFor="let number of getArrayOfAllowedNumbers(['4', '5', '6'])" 
               (click)="appendNumber(number)" 
               class="calculator__button calculator__button--orange calculator__button--round">
               {{ number }}
@@ -48,7 +48,7 @@
           </div>
           <div class="calculator__grid-five">
             <button 
-              *ngFor="let number of getArrayOfAllowedNumbers([1, 2, 3])" 
+              *ngFor="let number of getArrayOfAllowedNumbers(['1', '2', '3'])" 
               (click)="appendNumber(number)" 
               class="calculator__button calculator__button--orange calculator__button--round">
               {{ number }}
@@ -63,7 +63,7 @@
           <div class="calculator__grid-three">
             <button 
               class="calculator__button calculator__button--orange calculator__button--soft-corner"
-              (click)="appendNumber(0)">
+              (click)="appendNumber('0')">
               0
             </button>
             <button 

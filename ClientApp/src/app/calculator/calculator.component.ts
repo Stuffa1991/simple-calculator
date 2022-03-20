@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CalculatorService } from '../services/calculator.service';
 
 export type operand = "/" | "*" | "*" | "-" | "+";
-const allowedNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+const allowedNumbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 export type allowedNumbers = typeof allowedNumbers[number];
 
 @Component({
@@ -13,11 +13,11 @@ export type allowedNumbers = typeof allowedNumbers[number];
 export class CalculatorComponent {
 
   constructor(private calculatorService: CalculatorService) {}
-
+  
+  private _calculatedResult: string | undefined = undefined;
   calculatedOperand: operand | null = null;
-  calculatedResult: number | undefined = undefined;
   hasCalculated = false;
-  currentResult = 0;
+  currentResult = "0";
 
   async setOperand(operand: operand) {
     // This has to happen first, we need to calculate with the last set
@@ -30,27 +30,28 @@ export class CalculatorComponent {
     this.calculatedOperand = null;
     this.calculatedResult = undefined;
     this.hasCalculated = false;
-    this.currentResult = 0;
+    this.currentResult = "0";
   }
 
   async appendComma() {
-    if (this.currentResult.toString().indexOf('.') !== -1) {
+    if (this.currentResult.toString().indexOf('.') !== -1 || this.currentResult === "0") {
       return;
     }
     this.currentResult = await this.concat(this.currentResult, ".");
   }
 
   async appendNumber(number: allowedNumbers) {
-    if (this.hasCalculated || this.currentResult === 0 || (number === 0 && this.currentResult === 0)) {
-      this.currentResult = number
+    if (this.hasCalculated || this.currentResult === "0") {
+      if (number)
+      this.currentResult = `${number}`
       this.hasCalculated = false;
     } else {
       this.currentResult = await this.concat(this.currentResult, number);
     }
   }
 
-  async concat(concatOne: number | string, concatTwo: number | string): Promise<number> {
-    return Number(`${concatOne}${concatTwo}` as unknown as number);
+  async concat(concatOne: number | string, concatTwo: number | string): Promise<string> {
+    return `${concatOne}${concatTwo}`;
   }
 
   async calculate(operand?: operand) {
@@ -64,21 +65,32 @@ export class CalculatorComponent {
     } else {
       const actualOperand = operand ?? this.calculatedOperand;
       if (actualOperand) {
-        (await this.calculatorService.calculate(this.calculatedResult, actualOperand, this.currentResult)).subscribe(result => {
-          this.calculatedResult = result.result;
+        (await this.calculatorService.calculate(Number(this.calculatedResult), actualOperand, Number(this.currentResult))).subscribe(result => {
+          this.calculatedResult = result.result.toString();
         }); 
       }
     }
 
     this.hasCalculated = true;
-    this.currentResult = 0;
+    this.currentResult = "0";
   }
 
-  getArrayOfAllowedNumbers(numbers: number[]): allowedNumbers[] {
+  getArrayOfAllowedNumbers(numbers: string[]): allowedNumbers[] {
     return numbers.filter(this.isAllowedNumber);
   }
 
-  isAllowedNumber(number: number): number is allowedNumbers {
+  isAllowedNumber(number: string): number is allowedNumbers {
     return number in allowedNumbers;
+  }
+
+  set calculatedResult(value: string | undefined) {
+    if (value && value[value.length - 1] === ".") {
+      value = value.slice(0, -1);
+    }
+    this._calculatedResult = value;
+  }
+
+  get calculatedResult() {
+    return this._calculatedResult;
   }
 }
