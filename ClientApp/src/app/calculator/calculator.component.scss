@@ -2,10 +2,10 @@
   &__current {
     display: flex;
     justify-content: center;
+  }
 
-    &-result {
-      margin-right: 5px;
-    }
+  &__calculated-result, &__current-result {
+    min-height: 24px;
   }
 
   &__grid {
@@ -53,6 +53,7 @@
   }
 
   &__button {
+    user-select: none;
     border: 0;
 
     &--round {

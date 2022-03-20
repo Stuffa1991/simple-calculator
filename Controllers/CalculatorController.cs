@@ -14,9 +14,31 @@ public class CalculatorController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
-    public string GetA()
+    [HttpPost]
+    [Consumes("application/json")]
+    public CalculateResponse Calculate(CalculateRequest request)
     {
-        return "hest";
+        CalculateResponse response = new CalculateResponse();
+
+        switch (request.operand) {
+          case "*":
+            response.result = request.calculatedResult * request.currentResult;
+            break;
+          case "/":
+            try {
+                response.result = request.calculatedResult / request.currentResult;
+            } catch (DivideByZeroException) {
+                // Divided by zero
+            }
+            break;
+          case "+":
+            response.result = request.calculatedResult + request.currentResult;
+            break;
+          case "-":
+            response.result = request.calculatedResult - request.currentResult;
+            break;
+        }
+
+        return response;
     }
 }

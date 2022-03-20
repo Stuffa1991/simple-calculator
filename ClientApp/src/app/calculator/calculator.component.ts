@@ -1,8 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CalculatorService } from '../services/calculator.service';
 
-type operand = "/" | "*" | "*" | "-" | "+";
+export type operand = "/" | "*" | "*" | "-" | "+";
 const allowedNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-type allowedNumbers = typeof allowedNumbers[number];
+export type allowedNumbers = typeof allowedNumbers[number];
 
 @Component({
   selector: 'app-calculator',
@@ -10,6 +11,9 @@ type allowedNumbers = typeof allowedNumbers[number];
   styleUrls: ['./calculator.component.scss']
 })
 export class CalculatorComponent {
+
+  constructor(private calculatorService: CalculatorService) {}
+
   calculatedOperand: operand | null = null;
   calculatedResult: number | undefined = undefined;
   hasCalculated = false;
@@ -46,34 +50,23 @@ export class CalculatorComponent {
   }
 
   async concat(concatOne: number | string, concatTwo: number | string): Promise<number> {
-    return `${concatOne}${concatTwo}` as unknown as number;
+    return Number(`${concatOne}${concatTwo}` as unknown as number);
   }
 
   async calculate(operand?: operand) {
+    if (!this.calculatedOperand && !operand) {
+      return;
+    }
+
     // No need to do any calculations if no previous result
     if (!this.calculatedResult) {
       this.calculatedResult = this.currentResult;
     } else {
-      const mock = true;
       const actualOperand = operand ?? this.calculatedOperand;
-      if (mock) {
-      
-        switch (actualOperand) {
-          case "*":
-            this.calculatedResult = Number((this.calculatedResult ?? 1)) * Number(this.currentResult);
-            break;
-          case "/":
-            this.calculatedResult = Number((this.calculatedResult ?? 1)) / Number(this.currentResult);
-            break;
-          case "+":
-            this.calculatedResult = Number((this.calculatedResult ?? 0)) + Number(this.currentResult);
-            break;
-          case "-":
-            this.calculatedResult = Number((this.calculatedResult ?? 0)) - Number(this.currentResult);
-            break;
-        }
-      } else {
-        // TODO: Call service
+      if (actualOperand) {
+        (await this.calculatorService.calculate(this.calculatedResult, actualOperand, this.currentResult)).subscribe(result => {
+          this.calculatedResult = result.result;
+        }); 
       }
     }
 
