@@ -42,7 +42,6 @@ export class CalculatorComponent {
 
   async appendNumber(number: allowedNumbers) {
     if (this.hasCalculated || this.currentResult === "0") {
-      if (number)
       this.currentResult = `${number}`
       this.hasCalculated = false;
     } else {
